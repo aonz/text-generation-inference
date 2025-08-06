@@ -17,6 +17,7 @@ from text_generation_server.tgi_env import (
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel("DEBUG")
 
 
 def main():
