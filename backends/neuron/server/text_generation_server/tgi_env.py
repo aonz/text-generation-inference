@@ -253,6 +253,7 @@ def get_neuron_config_for_model(
     model_name_or_path: str, revision: Optional[str] = None
 ) -> NeuronConfig:
     try:
+        logger.info("get_neuron_config_for_model - 1")
         neuron_config = NeuronConfig.from_pretrained(
             model_name_or_path, revision=revision
         )
@@ -265,6 +266,7 @@ def get_neuron_config_for_model(
         )
         neuron_config = None
     if neuron_config is not None:
+        logger.info("get_neuron_config_for_model - 2")
         compatible = check_env_and_neuron_config_compatibility(
             neuron_config.to_dict(), check_compiler_version=False
         )
@@ -276,6 +278,7 @@ def get_neuron_config_for_model(
             logger.error(msg)
             raise Exception(msg)
     else:
+        logger.info("get_neuron_config_for_model - 3")
         neuron_config = lookup_compatible_cached_model(model_name_or_path, revision)
 
     return neuron_config

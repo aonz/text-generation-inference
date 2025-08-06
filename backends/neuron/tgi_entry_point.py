@@ -18,7 +18,6 @@ from text_generation_server.tgi_env import (
 
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
-logger.info("111111")
 
 
 def main():
@@ -28,7 +27,7 @@ def main():
     :return:
     """
     args = parse_cmdline_and_set_env()
-    logger.info("22222")
+    logger.info("main - 1")
     for env_var in tgi_env_vars:
         if not os.getenv(env_var):
             break
@@ -39,6 +38,7 @@ def main():
         )
         sys.exit(0)
 
+    logger.info("main - 2")
     neuron_config = get_neuron_config_for_model(args.model_id, args.revision)
 
     if not neuron_config:
