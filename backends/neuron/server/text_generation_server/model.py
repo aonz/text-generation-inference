@@ -86,7 +86,7 @@ def fetch_model(
     try:
         neuron_config = NeuronConfig.from_pretrained(model_id, revision=revision)
     except Exception as e:
-        logger.debug(
+        logger.info(
             "NeuronConfig.from_pretrained failed for model %s, revision %s: %s",
             model_id,
             revision,

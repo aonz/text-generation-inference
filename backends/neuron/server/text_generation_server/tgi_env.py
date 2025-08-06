@@ -122,7 +122,7 @@ def lookup_compatible_cached_model(
     # The only difference here is that we stay as flexible as possible on the compatibility part
     entries = get_hub_cached_entries(model_id)
 
-    logger.debug(
+    logger.info(
         "Found %d cached entries for model %s, revision %s",
         len(entries),
         model_id,
@@ -137,7 +137,7 @@ def lookup_compatible_cached_model(
             all_compatible.append(entry)
 
     if not all_compatible:
-        logger.debug(
+        logger.info(
             "No compatible cached entry found for model %s, env %s, available cores %s, neuronxcc version %s",
             model_id,
             get_env_dict(),
@@ -158,14 +158,14 @@ def lookup_compatible_cached_model(
 def check_env_and_neuron_config_compatibility(
     neuron_config_dict: Dict[str, Any], check_compiler_version: bool
 ) -> bool:
-    logger.debug(
+    logger.info(
         "Checking the provided neuron config %s is compatible with the local setup and provided environment",
         neuron_config_dict,
     )
 
     # Local setup compat checks
     if neuron_config_dict["tp_degree"] > available_cores:
-        logger.debug(
+        logger.info(
             "Not enough neuron cores available to run the provided neuron config"
         )
         return False
@@ -174,7 +174,7 @@ def check_env_and_neuron_config_compatibility(
         check_compiler_version
         and neuron_config_dict["neuronxcc_version"] != neuronxcc_version
     ):
-        logger.debug(
+        logger.info(
             "Compiler version conflict, the local one (%s) differs from the one used to compile the model (%s)",
             neuronxcc_version,
             neuron_config_dict["neuronxcc_version"],
@@ -183,7 +183,7 @@ def check_env_and_neuron_config_compatibility(
 
     batch_size = os.getenv("MAX_BATCH_SIZE", None)
     if batch_size is not None and neuron_config_dict["batch_size"] < int(batch_size):
-        logger.debug(
+        logger.info(
             "The provided MAX_BATCH_SIZE (%s) is higher than the neuron config batch size (%s)",
             os.getenv("MAX_BATCH_SIZE"),
             neuron_config_dict["batch_size"],
@@ -193,7 +193,7 @@ def check_env_and_neuron_config_compatibility(
     if max_total_tokens is not None and neuron_config_dict["sequence_length"] < int(
         max_total_tokens
     ):
-        logger.debug(
+        logger.info(
             "The provided MAX_TOTAL_TOKENS (%s) is higher than the neuron config sequence length (%s)",
             max_total_tokens,
             neuron_config_dict["sequence_length"],
@@ -201,7 +201,7 @@ def check_env_and_neuron_config_compatibility(
         return False
     num_cores = os.getenv("HF_NUM_CORES", None)
     if num_cores is not None and neuron_config_dict["tp_degree"] < int(num_cores):
-        logger.debug(
+        logger.info(
             "The provided HF_NUM_CORES (%s) is higher than the neuron config tp degree (%s)",
             num_cores,
             neuron_config_dict["tp_degree"],
@@ -217,7 +217,7 @@ def check_env_and_neuron_config_compatibility(
         neuron_config_value = map_torch_dtype(str(neuron_config_dict[config_key]))
         env_value = map_torch_dtype(auto_cast_type)
         if env_value != neuron_config_value:
-            logger.debug(
+            logger.info(
                 "The provided auto cast type and the neuron config param differ (%s != %s)",
                 env_value,
                 neuron_config_value,
@@ -232,7 +232,7 @@ def check_env_and_neuron_config_compatibility(
         else:
             sequence_length = neuron_config_dict["sequence_length"]
         if max_input_tokens >= sequence_length:
-            logger.debug(
+            logger.info(
                 "Specified max input tokens is not compatible with config sequence length ( %s >= %s)",
                 max_input_tokens,
                 sequence_length,
@@ -257,7 +257,7 @@ def get_neuron_config_for_model(
             model_name_or_path, revision=revision
         )
     except Exception as e:
-        logger.debug(
+        logger.info(
             "NeuronConfig.from_pretrained failed for model %s, revision %s: %s",
             model_name_or_path,
             revision,

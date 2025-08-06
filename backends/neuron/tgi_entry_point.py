@@ -18,6 +18,7 @@ from text_generation_server.tgi_env import (
 
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
+logger.info("111111")
 
 
 def main():
@@ -27,7 +28,7 @@ def main():
     :return:
     """
     args = parse_cmdline_and_set_env()
-
+    logger.info("22222")
     for env_var in tgi_env_vars:
         if not os.getenv(env_var):
             break

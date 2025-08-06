@@ -422,7 +422,7 @@ class NeuronGenerator(Generator):
                 f" Please align max_batch_size with the static batch size: {self.model.neuron_config.batch_size}."
             )
         # Assign each request to an empty slot
-        logger.debug(
+        logger.info(
             f"Prefilling {len(batch.requests)} new request(s) with {len(empty_slots)} empty slot(s)"
         )
         new_slots = []
@@ -430,7 +430,7 @@ class NeuronGenerator(Generator):
             slot = empty_slots.pop()
             slot.assign(self.batch_id, request, self.model.generation_config)
             new_slots.append(slot)
-            logger.debug(
+            logger.info(
                 f"Request {slot.request_id} assigned to slot {slot.id} with and max_new_tokens {slot.max_new_tokens}"
             )
         prefill_slots = new_slots
@@ -507,9 +507,9 @@ class NeuronGenerator(Generator):
         # Reactivate previously active slots for the next decode
         for i, slot in enumerate(active_slots):
             slot.resume()
-        logger.debug("Model ready for decoding")
+        logger.info("Model ready for decoding")
         if next_batch is not None:
-            logger.debug(
+            logger.info(
                 f"Next batch is {next_batch.id} with requests: {next_batch.request_ids}"
             )
         return generation, next_batch
@@ -618,7 +618,7 @@ class NeuronGenerator(Generator):
                     generated_tokens=slot.generated_tokens,
                     finish_reason=finish_reason,
                 )
-                logger.debug(
+                logger.info(
                     f"Decode complete for request {request_id} with {slot.generated_tokens} tokens"
                 )
                 # mark the slot as available
@@ -646,7 +646,7 @@ class NeuronGenerator(Generator):
             ]
             batch = self._cached_batch(next_batch_id, request_ids)
         else:
-            logger.debug("No more pending requests")
+            logger.info("No more pending requests")
         return generations, batch
 
     def _cached_batch(self, batch_id: int, request_ids: List):
@@ -684,7 +684,7 @@ class NeuronGenerator(Generator):
     def _clear(self, keep_slot_ids: List):
         for slot in self.slots:
             if slot.state != Slot.State.EMPTY and slot.id not in keep_slot_ids:
-                logger.debug(f"Removing slot {slot.id} with request {slot.request_id}")
+                logger.info(f"Removing slot {slot.id} with request {slot.request_id}")
                 slot.clear()
 
     @classmethod
@@ -703,7 +703,7 @@ class NeuronGenerator(Generator):
         try:
             neuron_config = NeuronConfig.from_pretrained(model_id, revision=revision)
         except Exception as e:
-            logger.debug(
+            logger.info(
                 "NeuronConfig.from_pretrained failed for model %s, revision %s: %s",
                 model_id,
                 revision,
