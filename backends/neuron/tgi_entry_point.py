@@ -39,15 +39,18 @@ def main():
         sys.exit(0)
 
     logger.info("main - 2")
+    logger.info(args.model_id)
+    logger.info(args.revision)
     neuron_config = get_neuron_config_for_model(args.model_id, args.revision)
     logger.info("main - 3")
+    logger.info(neuron_config)
     if not neuron_config:
         msg = (
             "No compatible neuron config found. Provided env {}, available cores {}, neuronxcc version {}"
         ).format(get_env_dict(), available_cores, neuronxcc_version)
         logger.error(msg)
         raise Exception(msg)
-
+    logger.info("main - 4")
     neuron_config_to_env(neuron_config)
 
 
