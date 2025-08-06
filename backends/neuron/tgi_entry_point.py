@@ -40,7 +40,7 @@ def main():
 
     logger.info("main - 2")
     neuron_config = get_neuron_config_for_model(args.model_id, args.revision)
-
+    logger.info("main - 3")
     if not neuron_config:
         msg = (
             "No compatible neuron config found. Provided env {}, available cores {}, neuronxcc version {}"

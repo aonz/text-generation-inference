@@ -252,6 +252,7 @@ def get_env_dict() -> Dict[str, str]:
 def get_neuron_config_for_model(
     model_name_or_path: str, revision: Optional[str] = None
 ) -> NeuronConfig:
+    logger.info("get_neuron_config_for_model - 0")
     try:
         logger.info("get_neuron_config_for_model - 1")
         neuron_config = NeuronConfig.from_pretrained(
