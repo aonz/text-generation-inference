@@ -15,9 +15,12 @@ from text_generation_server.tgi_env import (
     tgi_env_vars,
 )
 
-
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s",
+    stream=sys.stdout,
+)
 logger = logging.getLogger(__name__)
-logger.setLevel("DEBUG")
 
 
 def main():
