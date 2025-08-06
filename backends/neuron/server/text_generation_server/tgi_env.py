@@ -14,6 +14,7 @@ from optimum.neuron.utils import map_torch_dtype
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel("DEBUG")
 
 tgi_router_env_vars = [
     "MAX_BATCH_SIZE",

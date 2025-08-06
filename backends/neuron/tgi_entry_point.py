@@ -15,12 +15,9 @@ from text_generation_server.tgi_env import (
     tgi_env_vars,
 )
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s",
-    stream=sys.stdout,
-)
+
 logger = logging.getLogger(__name__)
+logger.setLevel("DEBUG")
 
 
 def main():
@@ -53,7 +50,7 @@ def main():
         ).format(get_env_dict(), available_cores, neuronxcc_version)
         logger.error(msg)
         raise Exception(msg)
-    logger.info("main - 4")
+    logger.info("main - ")
     neuron_config_to_env(neuron_config)
 
 
